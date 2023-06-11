@@ -1,3 +1,16 @@
 .DS_Store
 .idea/*
-
+venv/
+.venv/
+env/
+.env
+__pycache__/
+settings.py
+static/
+media/
+upload/
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.log

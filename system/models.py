@@ -6,9 +6,9 @@ from django.contrib.auth.models import User
 class Feedback(models.Model):
     title = models.CharField('标题', max_length=200)
     description = models.TextField('详细描述', blank=True, default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # META类选项
     class Meta:
