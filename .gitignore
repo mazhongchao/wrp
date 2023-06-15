@@ -1,11 +1,14 @@
 .DS_Store
-.idea/*
+.idea/
 venv/
 .venv/
 env/
+.env/
 .env
-__pycache__/
+prod.py
+dev.py
 settings.py
+__pycache__/
 static/
 media/
 upload/
@@ -14,3 +17,5 @@ upload/
 *.db
 *.sqlite3
 *.log
+uwsgi.ini
+*.pid

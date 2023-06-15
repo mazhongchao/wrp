@@ -21,3 +21,7 @@ class WayAdmin(admin.ModelAdmin):
 admin.site.register(Zone, ZoneAdmin)
 admin.site.register(Nature)
 admin.site.register(Way)
+
+admin.site.site_title = 'WRP系统'
+admin.site.site_header = 'WRP(0.1)'
+admin.site.index_title = 'WRP'
