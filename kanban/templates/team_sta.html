@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+    <script type="text/javascript" src="{% static 'lib/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
+    <div id="container" style="width: 100%; height: auto; /*background: antiquewhite*/">
+        <p><label><h2>本周-团队工作统计</h2></label></p>
+        <div id="work_count_data" style="float: left; width:1000px; height:400px; margin: auto;"></div>
+        <br/>
+        <div id="zone_count_data" style="float: left; width:1000px; height:400px; margin: auto;"></div>
+    </div>
+    <script>
+        let chart1 = echarts.init(document.getElementById('work_count_data'), 'white', {renderer: 'canvas'});
+        chart1.setOption({{ work_count_data | safe }});
+
+        let chart2 = echarts.init(document.getElementById('zone_count_data'), 'white', {renderer: 'canvas'});
+        chart2.setOption({{ project_count_data | safe }});
+    </script>
+
+{% endblock %}

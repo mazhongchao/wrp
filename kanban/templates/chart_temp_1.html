@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+
+{% block content %}
+    <script type="text/javascript" src="{% static 'lib/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('main'));
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption({{ chart_data | safe }});
+    </script>
+
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+{#    <div id="main2" style="width: 600px;height:400px;"></div>#}
+{#        <script type="text/javascript">#}
+{#            // 基于准备好的dom，初始化echarts实例#}
+{#            let myChart2 = echarts.init(document.getElementById('main2'));#}
+{##}
+{#            // 指定图表的配置项和数据#}
+{#            let option2 = {{ chart_data | safe }};#}
+{##}
+{#            // 使用刚指定的配置项和数据显示图表。#}
+{#            myChart2.setOption(option2);#}
+{#        </script>#}
+{#    </div>#}
+{% endblock %}

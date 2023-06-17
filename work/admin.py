@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from .models import Log, Plan
 from wrp import utils
 
+
 # Register your models here.
 class LogForm(forms.ModelForm):
     def clean(self):

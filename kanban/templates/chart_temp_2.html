@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+
+{% block content %}
+    <script type="text/javascript" src="{% static 'lib/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
+    <div id="bar" style="width:1000px; height:600px;"></div>
+    <script>
+        let chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+
+        $(
+            function () {
+                fetchData(chart);
+            }
+        );
+
+        function fetchData() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/kanban/kanban/chart_temp_2_json",
+                dataType: 'json',
+                success: function (result) {
+                    chart.setOption(result.data);
+                }
+            });
+        }
+    </script>
+{% endblock %}
