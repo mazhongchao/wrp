@@ -23,9 +23,13 @@
             <div style="text-align: center;">{{ this_week_start }} ～ {{ this_week_end }}</div>
         </label>
 {#        <div id="work_count_data" style="float: left; width:100%; height:400px; margin: auto;"></div>#}
-{#        <div id="work_count_data" style="float: left; width:100%; height:400px; margin: auto;">#}
-{#            <img src="/static/bar.png" width="1200px" height="329px"/>#}
-{#        </div>#}
+        <h2>〇、本周工作统计</h2>
+        <div style="float: left; width:100%; height:381px; margin: auto;">
+            <img src="/static/tmp/bar1.png" width="906px" height="375px"/>
+        </div>
+        <div style="float: left; width:100%; height:393px; margin: auto;">
+            <img src="/static/tmp/pie1.png" width="984px" height="387px"/>
+        </div>
         <h2>一、本周工作汇总</h2>
         {% for zone in zone_logs.values %}
         <h3>{{ zone.num }}、{{ zone.name }}</h3>
@@ -70,27 +74,22 @@
         <h2>二、下周工作计划</h2>
         <table class="table" style="width: 95%">
             <thead>
-                <!--<tr><th>姓名</th><th>计划工作项数量</th><th>计划内容</th></tr>-->
-                <tr><th style="width: 8%">姓名</th><th style="width: 10%">计划项数</th><th style="width: 10%">工作性质</th><th style="width: 38%">工作内容</th><th style="width: 17%">工作归属</th><th style="width: 17%">预计起止时间</th></tr>
+                <tr><th style="width: 18%">姓名/计划项数</th><th style="width: 10%">工作性质</th><th style="width: 38%">工作内容</th><th style="width: 17%">工作归属</th><th style="width: 17%">预计起止时间</th></tr>
             </thead>
             <tbody>
                 {% for work_plan in work_plans.values %}
                     <tr>
-                    {% if work_plan.plan_list|length > 1 %}
-                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;font-weight: bold;">{{ work_plan.user_name }}</td>
-                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle">{{ work_plan.plan_list|length }}</td>
+                    {% if work_plan.plan_list|length > 0 %}
+                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;font-weight: bold;">{{ work_plan.user_name }} / {{ work_plan.plan_list|length }}</td>
                     {% else %}
-                        <td><span style="font-weight: bold">{{ work_plan.user_name }}</span></td><td>{{ work_plan.plan_list|length }}</td>
+                        <td><span style="vertical-align: middle;font-weight: bold">{{ work_plan.user_name }} / 0</span></td>
                     {% endif %}
                     {% if work_plan.plan_list|length > 0 %}
                     {% for plan in work_plan.plan_list %}
                         <td>{{ plan.nature }}</td>
                         <td>{{ plan.title }}</td>
                         <td>{{ plan.zone }}</td>
-                        <td>{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}</td>
-                        <!--<td>
-                            【{{ plan.nature }}工作】{{ plan.title }}，归属{{ plan.zone }}，预计时间：{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}<br/>
-                        </td>--></tr>
+                        <td>{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}</td></tr>
                     {% endfor %}
                     {% else %}
                         <td colspan="4" style="color:#fc4903">没有下周计划</td>

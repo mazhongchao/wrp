@@ -55,26 +55,23 @@
         <table class="table" style="width: 95%">
             <thead>
                 <!--<tr><th>姓名</th><th>计划工作项数量</th><th>计划内容</th></tr>-->
-                <tr><th>姓名</th><th>计划工作项数量</th><th>工作性质</th><th>工作内容</th><th>工作归属</th><th style="width:25%">预计开始结束时间</th></tr>
+                <tr><th>姓名/计划项数量</th><th>工作性质</th><th>工作内容</th><th>工作归属</th><th style="width:25%">预计开始结束时间</th></tr>
             </thead>
             <tbody>
                 {% for work_plan in work_plans.values %}
                     <tr>
-                    {% if work_plan.plan_list|length > 1 %}
-                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;font-weight: bold;">{{ work_plan.user_name }}</td>
-                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;">{{ work_plan.plan_list|length }}</td>
+                    {% if work_plan.plan_list|length > 0 %}
+                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;font-weight: bold;">{{ work_plan.user_name }} / {{ work_plan.plan_list|length }}</td>
+{#                        <td rowspan="{{ work_plan.plan_list|length }}" style="vertical-align: middle;">{{ work_plan.plan_list|length }}</td>#}
                     {% else %}
-                        <td><span style="font-weight: bold">{{ work_plan.user_name }}</span></td><td>{{ work_plan.plan_list|length }}</td>
+                        <td><span style="vertical-align: middle;font-weight: bold">{{ work_plan.user_name }} / 0</span></td>
                     {% endif %}
                     {% if work_plan.plan_list|length > 0 %}
                     {% for plan in work_plan.plan_list %}
                         <td>【{{ plan.nature }}工作】</td>
                         <td>{{ plan.title }}</td>
                         <td>{{ plan.zone }}</td>
-                        <td>{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}</td>
-                        <!--<td>
-                            【{{ plan.nature }}工作】{{ plan.title }}，归属{{ plan.zone }}，预计时间：{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}<br/>
-                        </td>--></tr>
+                        <td>{{ plan.expected_start_time }} ～ {{ plan.expected_end_time }}</td></tr>
                     {% endfor %}
                     {% else %}
                         <td colspan="4" style="color:#fc4903">没有下周计划</td>
