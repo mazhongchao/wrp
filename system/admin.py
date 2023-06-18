@@ -13,8 +13,8 @@ class NoteAdmin(admin.ModelAdmin):
     radio_fields = {'type': admin.HORIZONTAL}
 
 
-admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Notes, NoteAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
 
 
 apps_index = ["kanban", "work", "conf", "system", "auth"]

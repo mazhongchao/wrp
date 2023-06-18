@@ -83,8 +83,10 @@ def work_report_pdf(request):
 
     # 通过网页生成PDF
     try:
+        url = settings.SITE_HOST + '/kanban/kanban/work_report_preview'
+        print(url)
         config = pdfkit.configuration(wkhtmltopdf="/usr/local/bin/wkhtmltopdf")
-        pdfkit.from_url('http://127.0.0.1:8000/kanban/kanban/work_report_preview', pdf_file,
+        pdfkit.from_url(url, pdf_file,
                         options={'encoding': "utf-8", 'javascript-delay': 500},
                         configuration=config)
     except Exception as e:
@@ -218,58 +220,3 @@ def _report_data():
 
     return {"zone_logs": zone_logs, "work_plans": work_plans,
             "this_week_start": this_week_start, "this_week_end": this_week_end}
-
-
-def chart_temp_1_view(request):
-    chart = (
-        Bar().add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
-        .add_yaxis("商家A", [5, 20, 36, 10, 75, 90])
-        .add_yaxis("商家B", [15, 25, 16, 55, 48, 8])
-        .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
-    )
-    return render(request, 'chart_temp_1.html', context={'chart_data': chart.dump_options()})
-
-
-def chart_temp_2_view(request):
-    return render(request, 'chart_temp_2.html')
-
-
-def chart_temp_2_json(request):
-    c = (
-        Bar()
-        .add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
-        .add_yaxis("商家A", [randrange(0, 100) for _ in range(6)])
-        .add_yaxis("商家B", [randrange(0, 100) for _ in range(6)])
-        .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
-        .dump_options_with_quotes()
-    )
-    return json_response(json.loads(c))
-
-
-def response_as_json(data):
-    json_str = json.dumps(data)
-    response = HttpResponse(
-        json_str,
-        content_type="application/json",
-    )
-    response["Access-Control-Allow-Origin"] = "*"
-    return response
-
-
-def json_response(data, code=200):
-    data = {
-        "code": code,
-        "msg": "success",
-        "data": data,
-    }
-    return response_as_json(data)
-
-
-def json_error(error_string="error", code=500, **kwargs):
-    data = {
-        "code": code,
-        "msg": error_string,
-        "data": {}
-    }
-    data.update(kwargs)
-    return response_as_json(data)
