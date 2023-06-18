@@ -85,7 +85,7 @@ def work_report_pdf(request):
     try:
         config = pdfkit.configuration(wkhtmltopdf="/usr/local/bin/wkhtmltopdf")
         pdfkit.from_url('http://127.0.0.1:8000/kanban/kanban/work_report_preview', pdf_file,
-                        options={'encoding': "utf-8", 'javascript-delay': 300},
+                        options={'encoding': "utf-8", 'javascript-delay': 500},
                         configuration=config)
     except Exception as e:
         return HttpResponse('PDF生成失败：'+str(e))

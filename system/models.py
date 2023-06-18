@@ -20,8 +20,8 @@ class Feedback(models.Model):
 
 
 class NotesType(models.IntegerChoices):
-    PRODUCT = 1, '版本说明'
-    PROJECT = 2, '使用说明'
+    PRODUCT = 1, '版本发布说明'
+    PROJECT = 2, '系统使用说明'
 
 
 class Notes(models.Model):
