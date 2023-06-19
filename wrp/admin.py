@@ -34,10 +34,10 @@ class WrpAdminSite(admin.AdminSite):
             new_sorted_models.sort(key=lambda s: s["pos"])
             models = [x["model"] for x in new_sorted_models]
             app["models"] = models
-        print(new_sorted_models)
+        # print(new_sorted_models)
         new_sorted_apps.sort(key=lambda x: x["pos"])
-        print(new_sorted_apps)
+        # print(new_sorted_apps)
         app_list = [a["app"] for a in new_sorted_apps]
-        print(app_list)
+        # print(app_list)
 
         return app_list
