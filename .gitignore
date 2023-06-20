@@ -8,7 +8,6 @@ env/
 local*.py
 prod.py
 dev.py
-settings.py
 __pycache__/
 static/
 media/
