@@ -5,6 +5,7 @@ venv/
 env/
 .env/
 .env
+local*.py
 prod.py
 dev.py
 settings.py
