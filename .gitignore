@@ -6,8 +6,6 @@ env/
 .env/
 .env
 local*.py
-prod.py
-dev.py
 __pycache__/
 static/
 media/
