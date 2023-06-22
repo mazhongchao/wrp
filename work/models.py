@@ -5,7 +5,7 @@ from conf.models import Zone, Nature, Way
 
 
 class Log(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='姓名')
     is_plan = models.IntegerField('是否上周计划', default=0)
     title = models.CharField('工作事项', max_length=200)
     zone = models.ForeignKey(Zone, on_delete=models.CASCADE, verbose_name='工作域')

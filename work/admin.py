@@ -1,5 +1,4 @@
 from django import forms
-from django.apps import apps
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Log, Plan
@@ -19,7 +18,7 @@ class LogForm(forms.ModelForm):
 
 class LogAdmin(admin.ModelAdmin):
     form = LogForm
-    list_display = ('title', 'plan_text', 'zone', 'nature',  'way', 'start_time', 'end_time')
+    # list_display = ('title', 'plan_text', 'staff_name', 'zone', 'nature', 'way', 'start_time', 'end_time')
     fields = ('plan_status', 'title', 'zone', 'nature', 'way', 'start_time', 'end_time')
     radio_fields = {'nature': admin.HORIZONTAL}
     readonly_fields = ('plan_status',)
@@ -50,6 +49,12 @@ class LogAdmin(admin.ModelAdmin):
 
     plan_status.short_description = '计划情况'
 
+    def staff_name(self, obj):
+        user_name = f'{obj.user.first_name}{obj.user.last_name}'
+        return format_html('<span>{}<span>', user_name)
+
+    staff_name.short_description = '负责人'
+
     def get_queryset(self, request):
         this_week_start, this_week_end = utils.this_week_range()
 
@@ -57,6 +62,14 @@ class LogAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs.filter(start_time__range=(this_week_start, this_week_end))
         return qs.filter(user=request.user, start_time__range=(this_week_start, this_week_end))
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            self.list_display = ('title', 'plan_text', 'staff_name', 'zone', 'nature', 'way', 'start_time', 'end_time')
+        else:
+            self.list_display = ('title', 'plan_text', 'zone', 'nature', 'way', 'start_time', 'end_time')
+
+        return self.list_display
 
 
 class PlanAdmin(admin.ModelAdmin):
@@ -87,4 +100,3 @@ class PlanAdmin(admin.ModelAdmin):
 
 admin.site.register(Log, LogAdmin)
 admin.site.register(Plan, PlanAdmin)
-

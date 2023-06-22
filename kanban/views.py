@@ -1,20 +1,14 @@
 import os
-import json
-from random import randrange
 from django.utils.encoding import escape_uri_path
 from django.shortcuts import render
 from django.http import HttpResponse, FileResponse
 from django.contrib.auth.models import User
-from django.contrib.staticfiles import finders
 from django.template.loader import get_template
 from jinja2 import Environment, FileSystemLoader
 from pyecharts.globals import CurrentConfig, RenderType
 
-# CurrentConfig.GLOBAL_ENV = Environment(loader=FileSystemLoader("./kanban/templates/pyecharts"))
-
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Pie
-from pyecharts.faker import Faker
 
 import pdfkit
 from work.models import Log
@@ -131,9 +125,15 @@ def _staff_work_count():
 
     this_week_start, this_week_end = utils.this_week_range()
     work_sta = Log.objects.filter(start_time__gte=this_week_start,
-                                  start_time__lte=this_week_end).values('user_id')
+                                  start_time__lte=this_week_end,
+                                  ).values('user_id')
+
+    print(work_count)
     for sta in work_sta:
         user_id = sta['user_id']
+        if user_id in settings.STA_EXCLUDE_USER_ID:
+            continue
+
         if user_id not in work_count:
             work_count[user_id][1] = 1
         else:
@@ -170,6 +170,9 @@ def _report_data():
     # 本周工作
     zone_logs = {}
     for work in worklog:
+        if work.user_id in settings.STA_EXCLUDE_USER_ID:
+            continue
+
         work.user_name = users_dict[work.user_id]
         work.nature_name = natures[work.nature_id]
 
