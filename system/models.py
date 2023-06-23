@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Feedback(models.Model):
-    title = models.CharField('标题', max_length=200)
-    description = models.TextField('详细描述', blank=True, default='')
+    title = models.CharField('标题', max_length=200, blank=True, default='')
+    description = models.TextField('详细描述', blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
