@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Feedback(models.Model):
-    title = models.CharField('标题', max_length=200, blank=True, default='')
-    description = models.TextField('详细描述', blank=False)
+    title = models.CharField('反馈标题', max_length=200, blank=True, default='')
+    description = models.TextField('反馈信息', blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新时间")
 
     # META类选项
     class Meta:
@@ -25,11 +25,11 @@ class NotesType(models.IntegerChoices):
 
 
 class Notes(models.Model):
-    title = models.CharField('标题', max_length=200)
-    type = models.IntegerField('类型', choices=NotesType.choices)
-    description = models.TextField('内容', blank=True, default='')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    title = models.CharField('说明标题', max_length=200)
+    type = models.IntegerField('说明类型', choices=NotesType.choices)
+    description = models.TextField('说明内容', blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新时间")
 
     # META类选项
     class Meta:

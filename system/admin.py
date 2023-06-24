@@ -14,6 +14,12 @@ class NoteAdmin(admin.ModelAdmin):
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'staff_name', 'updated_at')
 
+    def staff_name(self, obj):
+        user_name = f'{obj.user.first_name} {obj.user.last_name}'
+        return format_html('<span>{}<span>', user_name)
+
+    staff_name.short_description = '反馈人'
+
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
@@ -22,12 +28,6 @@ class FeedbackAdmin(admin.ModelAdmin):
         self.exclude = ("user",)
         form = super(FeedbackAdmin, self).get_form(request, obj, **kwargs)
         return form
-
-    def staff_name(self, obj):
-        user_name = f'{obj.user.first_name} {obj.user.last_name}'
-        return format_html('<span>{}<span>', user_name)
-
-    staff_name.short_description = '反馈人'
 
     def get_readonly_fields(self, request, obj):
         # view and change
