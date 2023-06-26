@@ -8,7 +8,7 @@ models_index = {'kanban': ["TeamSta", "Report"], 'work': ["Log", "Plan"], 'conf'
 
 class WrpAdminSite(admin.AdminSite):
     site_title = 'WRP系统'
-    site_header = 'WRP(0.2)'
+    site_header = 'WRP(0.3)'
     index_title = 'WRP'
 
     # apps_order_list = ["kanban", "work", "conf", "system", "auth"]

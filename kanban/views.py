@@ -6,24 +6,19 @@ from django.contrib.auth.models import User
 from django.template.loader import get_template
 from jinja2 import Environment, FileSystemLoader
 from pyecharts.globals import CurrentConfig, RenderType
-
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Pie
-
 import pdfkit
 from work.models import Log
 from conf.models import Zone
 from wrp import utils
 from wrp import settings
 
-
 CurrentConfig.GLOBAL_ENV = Environment(loader=FileSystemLoader("./kanban/templates/pyecharts"))
 # Create your views here.
 
 
 def team_sta(request):
-    this_week_start, this_week_end = utils.this_week_range()
-
     users_name, users_count = _staff_work_count()
 
     work_count_bar = (
@@ -32,16 +27,7 @@ def team_sta(request):
         .set_global_opts(title_opts=opts.TitleOpts(title="工作量统计", subtitle=""))
     )
 
-    zones = Zone.objects.all()
-    worklog = Log.objects.filter(start_time__gte=this_week_start, start_time__lte=this_week_end)
-
-    zone_sta = {}
-    for zone in zones:
-        zone_sta[zone.id] = [zone.name, 0]
-
-    for work in worklog:
-        if work.zone_id in zone_sta:
-            zone_sta[work.zone_id][1] = zone_sta[work.zone_id][1] + 1
+    zone_sta = _zone_work_count()
 
     zone_count_pie = (
         Pie()
@@ -63,10 +49,8 @@ def work_report(request):
 
 
 def work_report_pdf(request):
-
     context = _report_data()
 
-    # find the template and render it.
     template_path = 'work_report_pdf.html'
     template = get_template(template_path)
     html = template.render(context)
@@ -75,7 +59,7 @@ def work_report_pdf(request):
     pdf_file = f'{os.path.abspath(os.path.dirname(os.path.dirname(__file__)))}/static/{file_name}'
     print(pdf_file)
 
-    # 通过网页生成PDF
+    # to generate PDF from web page url
     try:
         url = settings.SITE_HOST + '/kanban/kanban/work_report_preview'
         print(url)
@@ -128,7 +112,6 @@ def _staff_work_count():
                                   start_time__lte=this_week_end,
                                   ).values('user_id')
 
-    print(work_count)
     for sta in work_sta:
         user_id = sta['user_id']
         if user_id in settings.STA_EXCLUDE_USER_ID:
@@ -144,6 +127,48 @@ def _staff_work_count():
         users_count.append(value[1])
 
     return users_name, users_count
+
+
+def _zone_work_count():
+    this_week_start, this_week_end = utils.this_week_range()
+
+    zones = Zone.objects.all()
+    worklog = Log.objects.filter(start_time__gte=this_week_start, start_time__lte=this_week_end)
+
+    zone_sta = {}
+    for zone in zones:
+        zone_sta[zone.id] = [zone.name, 0]
+
+    for work in worklog:
+        if work.zone_id in zone_sta:
+            zone_sta[work.zone_id][1] = zone_sta[work.zone_id][1] + 1
+
+    return zone_sta
+
+
+# def _report_chart_image():
+#     users_name, users_count = _staff_work_count()
+#     zone_work_count = _zone_work_count()
+#     pie_values = []
+#     pie_labels = []
+#     colors = ["#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#e6ab02"]
+#     for v in zone_work_count.values():
+#         pie_labels.append(v[0])
+#         pie_values.append(v[1])
+#
+#     fig = plt.figure()
+#     ax = fig.add_axes([0, 0, 1, 1])
+#     ax.bar(users_name, users_count)
+#     image_dir = settings.BASE_DIR / "static/tmp"
+#     plt.savefig(f'{image_dir}/bar_work_count.png', dpi=500)
+#
+#     plt.figure(figsize=(8, 6))
+#     wedges, texts, autotexts = plt.pie(pie_values, labels=pie_labels, autopct='%1.1f%%')
+#     plt.legend(wedges, pie_labels, title="工作域", loc="center left",
+#                bbox_to_anchor=(1, 0, 0.5, 1))
+#     plt.title('工作域统计')
+#     plt.axis('equal')
+#     plt.savefig(f'{image_dir}/pie_zone_count.png', dpi=500)
 
 
 def _report_data():
