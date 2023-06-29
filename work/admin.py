@@ -7,13 +7,20 @@ from wrp import utils
 
 # Register your models here.
 class LogForm(forms.ModelForm):
-    def clean(self):
-        start_time = self.cleaned_data['start_time']
-        end_time = self.cleaned_data['end_time']
+    # title = TextField('工作事项', blank=False)
 
-        t_delta = end_time - start_time
-        if t_delta.days < 1 and t_delta.seconds < 1800:
-            raise forms.ValidationError({'end_time': "开始时间和完成时间差过小"})
+    def clean(self):
+        if 'start_time' not in self.cleaned_data:
+            raise forms.ValidationError({'start_time': "必须填写开始时间"})
+
+        start_time = self.cleaned_data['start_time']
+
+        if 'end_time' in self.cleaned_data and self.cleaned_data['end_time'] is not None:
+            end_time = self.cleaned_data['end_time']
+
+            t_delta = end_time - start_time
+            if t_delta.days < 1 and t_delta.seconds < 1800:
+                raise forms.ValidationError({'end_time': "开始时间和完成时间差过小"})
 
 
 class LogAdmin(admin.ModelAdmin):
