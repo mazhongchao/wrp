@@ -22,6 +22,7 @@ In Linux:
 * Nginx (for production environment)
 * uWSGI（for production environment）
 * SQLite3 or MySQL8
+* wkhtmltopdf
 * google-chrome
 * chromedriver
 
