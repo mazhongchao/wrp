@@ -7,16 +7,6 @@ A system for work recording and planning.
 pip install -r requirements.txt
 ```
 
-## Start
-In Linux:
-```bash
-./manage.py makemigrations
-./manage.py migrate
-./manage.py createsuperuser
-
-# development or test environment
-./manage.py runserver 
-```
 
 ## External dependencies
 * Nginx (for production environment)
@@ -38,4 +28,60 @@ sudo dnf install google-chrome-stable_current_x86_64.rpm
 # chromedriver
 wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
 upzip chromedriver_linux64.zip
+```
+
+
+## Start
+* Development or test environment
+```bash
+# For Linux:
+./manage.py makemigrations
+./manage.py migrate
+./manage.py createsuperuser
+
+./manage.py runserver 
+```
+
+* Production environment
+
+uWSGI
+```bash
+[uwsgi]
+chdir=/<PATH>/<TO>/wrp
+module=wrp.wsgi:application
+socket=127.0.0.1:[<YOUR_PORT>]
+master=true
+processes=2
+pidfile=/<PATH>/<TO>/uwsgi.pid
+daemonize=/<PATH>/<TO>/run.log
+disable-logging=true
+```
+
+Nginx
+
+```bash
+server
+{
+    listen <YOUR_PORT>;
+    server_name <YOUR_HOST>;
+
+    charset utf-8;
+
+    access_log  /var/log/nginx/wrp-access.log main;
+    error_log   /var/log/nginx/wrp-error.log  error;
+
+    location / {
+        include  /etc/nginx/uwsgi_params;
+        uwsgi_pass  <YOUR_UWSGI_HOST_PORT>;
+    }
+    location /static {
+        alias /<PATH>/<TO>/wrp/static;
+    }
+    location /media {
+        alias /<PATH>/<TO>/wrp/media;
+    }
+    location /upload {
+        alias /<PATH>/<TO>/wrp/upload;
+    }
+}
 ```
