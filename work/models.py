@@ -16,7 +16,7 @@ class Log(models.Model):
     start_time = models.DateTimeField('开始时间')
     end_time = models.DateTimeField('完成时间', blank=True, null=True)
     for_who = models.CharField('提出人(对于非主线工作)', max_length=100, default='', blank=True)
-    detail = models.TextField('详细记录', blank=True, default='')
+    # detail = models.TextField('详细记录', blank=True, default='')
 
     # META类选项
     class Meta:
