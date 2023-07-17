@@ -235,7 +235,8 @@ def _report_data():
 
     # 下周计划
     next_week_start, next_week_end = utils.next_week_range()
-    worklog = Log.objects.filter(expected_start_time__gte=next_week_start, expected_start_time__lte=next_week_end)
+    worklog = Log.objects.filter(expected_start_time__gte=next_week_start, expected_start_time__lte=next_week_end,
+                                 is_plan=1)
     work_plans = {}
     for user_id, user_name in users_dict.items():
         work_plans[user_id] = {'user_name': user_name, 'plan_list': []}
@@ -243,7 +244,10 @@ def _report_data():
     for plan in worklog:
         if plan.user_id in work_plans:
             plan.expected_start_time = plan.expected_start_time.strftime('%m-%d')
-            plan.expected_end_time = plan.expected_end_time.strftime('%m-%d')
+            if plan.expected_end_time is not None:
+                plan.expected_end_time = plan.expected_end_time.strftime('%m-%d')
+            else:
+                plan.expected_end_time = '未知'
             work_plans[plan.user_id]['plan_list'].append(plan)
 
     return {"zone_logs": zone_logs, "work_plans": work_plans,
